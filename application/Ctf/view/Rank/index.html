@@ -1,0 +1,57 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<div>
+	<h1>排名</h1>
+	<table border="1" id="rankingList">
+		<tr>
+		<th>rank</th>
+		<th>昵称</th>
+		<th>分数</th>
+		</tr>
+
+	</table>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+      $.ajax({
+        url : "/ctf/rank/getTopN",//后台请求的数据，用的是PHP
+        dataType : "json",//数据格式 
+        type : "post",//请求方式
+        async : false,//是否异步请求
+        success : function(data) {  //如果请求成功，返回数据。
+        	for(var i=0;i<data.length;i++){
+        		var html = "";
+		        var info = data[i];
+
+
+		        //生成
+	            var rank_tr = document.createElement("tr");
+	            rank_tr.className='rank_tr';
+	            //nickname
+	            var rank = document.createElement("td");
+	            rank.innerHTML=i+1;
+	            rank_tr.appendChild(rank);
+	            //nickname
+	            var nickname = document.createElement("td");
+	            nickname.innerHTML=info.nickname;
+	            rank_tr.appendChild(nickname);
+	            //score
+	            var score = document.createElement("td");
+	            score.innerHTML=info.score;
+	            rank_tr.appendChild(score);
+
+	            var element = document.getElementById("rankingList");
+            	element.appendChild(rank_tr);
+
+        	}
+
+
+        }, 
+      })
+    })
+</script>
+
+</html>

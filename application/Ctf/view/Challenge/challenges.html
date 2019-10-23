@@ -1,0 +1,223 @@
+<html>
+<style type="text/css">
+  #boxes_container{
+    margin-left: 5%;
+    margin-right: 5%;
+    width: 90%;
+    height: 90%;
+
+    background:rgb(100, 100, 100);
+  }
+  .box{
+    height: 300px;
+    width: 300px;
+    background:rgb(200, 200, 200);
+    margin: 1%;
+    float: left;
+    cursor:pointer;
+  }
+  .box:hover{
+    background-color:rgb(250, 250, 250);
+  }
+  .title{
+    text-align:center;
+  }
+  .score{
+    text-align:center;
+  }
+  .desc{
+    text-align:center;
+  }
+  .address{
+    text-align:center;
+  }
+  .attached_file{
+    text-align:center;
+  }
+  .close_btn{
+    right: 0;
+    position: absolute;
+    margin: 30px;
+    cursor:pointer;
+    
+    
+  }
+  #detail{
+    height: 400px;
+    width: 800px;
+    text-align:center;
+    background:rgb(200, 200, 200);
+    margin: 1%;
+    display: none;
+    position: fixed;
+  }
+</style>
+
+<!-- detail_box : 点击challenge_box后弹出 -->
+<div id="detail">
+  <div class="close_btn">close</div>
+  <p class="challenge_id"></p>
+  <h1 class='title'></h1>
+  
+  <h1 class='desc'></h1>
+  <a class="address" href=""></a>
+  <br>
+  <a class='attached_file' href=""></a>
+  <br>
+  <br>
+  <br>
+  <form name="registerFrom" onsubmit="return formCheck()"  method="POST">
+    flag:
+    <input type="text" id="flag_submit">
+    <input type="button" value="提交flag" onclick="submitFlag();">
+  </form>
+</div>
+
+<!-- challenge_box放在boxes_container里面 -->
+<div id="boxes_container" ></div>
+
+<script type="text/javascript">
+
+var challenge_info_list = new Array();
+
+	$(document).ready(function() {
+      //create challenge_box
+      $.ajax({
+        url : "/ctf/challenge/web",//后台请求的数据，用的是PHP
+        dataType : "json",//数据格式 
+        type : "get",//请求方式
+        async : false,//是否异步请求
+        success : function(data) {  //如果请求成功，返回数据。
+        for(var i=0;i<data.length;i++){  //遍历data数组
+            //将题目信息存入challenge_info_list
+            var info = data[i];
+            challenge_info_list[info.challenge_id] = new Array();
+            challenge_info_list[info.challenge_id]['challenge_desc'] = info.challenge_desc;
+            challenge_info_list[info.challenge_id]['address'] = info.address;
+            challenge_info_list[info.challenge_id]['title'] = info.title;
+            challenge_info_list[info.challenge_id]['attached_file'] = info.attached_file;
+
+            if(info.attached_file == null){
+              challenge_info_list[info.challenge_id]['attached_file'] = info.attached_file;
+            } else {
+               var temp = info.attached_file.split(';');
+               challenge_info_list[info.challenge_id]['attached_file'] = new Array();
+               for(var j=0;j<temp.length;j++){
+                  var temp2 = temp[j].split('=');
+                  challenge_info_list[info.challenge_id]['attached_file'][j] = new Array();
+                  challenge_info_list[info.challenge_id]['attached_file'][j]['name']=temp2[0];
+                  challenge_info_list[info.challenge_id]['attached_file'][j]['address']=temp2[1];
+               }
+            }
+
+            //生成题目盒子
+            var box = document.createElement("div");
+            box.className='box';
+            box.id=info.challenge_id;
+            //分值
+            var score = document.createElement("h1");
+            score.className='score';
+            score.innerHTML=info.current_score;
+            box.appendChild(score);
+            //题目名
+            var title = document.createElement("h1");
+            title.className='title';
+            title.innerHTML=info.title;
+            box.appendChild(title);
+
+            var element = document.getElementById("boxes_container");
+            element.appendChild(box);
+          }
+        }, 
+      })
+
+      //turn box darker
+      $.ajax({
+        url : `/ctf/user/getsolvedchallenges`,//后台请求的数据，用的是PHP
+        dataType : "json",//数据格式 
+        type : "get",//请求方式
+        async : false,//是否异步请求
+        success : function(data) {  //如果请求成功，返回数据。
+          for(var i=0;i<data.length;i++){
+            var challenge_id = data[i];
+            $(`#${challenge_id}`).css('background','rgb(150, 150, 150)');
+          }
+          
+        }
+      })
+    })
+
+
+//点击题目box弹出detail box
+$("#boxes_container").on("click",".box",function(){
+  windowHeight = $(window).height();
+  windowWidth = $(window).width();
+  popHeight = $("#detail").height();
+  popWidth = $("#detail").width();
+  var challenge_id = this.id;//题目名
+  //start
+
+  //计算弹出窗口的左上角X的偏移量
+  var popX = (windowWidth - popWidth) / 2;
+  // 计算弹出窗口的左上角Y的偏移量为窗口的高度 - 弹窗高度 / 2 + 被卷去的页面的top
+  var popY = (windowHeight - popHeight) / 2 + $(document).scrollTop() - 100;
+  
+  document.getElementById("detail").getElementsByClassName("challenge_id")[0].innerHTML = challenge_id;
+  document.getElementById("detail").getElementsByClassName("title")[0].innerHTML = challenge_info_list[challenge_id]['title'];;
+  document.getElementById("detail").getElementsByClassName("desc")[0].innerHTML = challenge_info_list[challenge_id]['challenge_desc'];
+  document.getElementById("detail").getElementsByClassName("address")[0].innerHTML = challenge_info_list[challenge_id]['address'];
+  document.getElementById("detail").getElementsByClassName("address")[0].href = challenge_info_list[challenge_id]['address'];
+
+  if(challenge_info_list[challenge_id]['attached_file'] == null){
+    document.getElementById("detail").getElementsByClassName("attached_file")[0].innerHTML = challenge_info_list[challenge_id]['attached_file'];
+  } else {
+    var html = '';
+    for(var i=0;i<challenge_info_list[challenge_id]['attached_file'].length;i++){
+      html += `<a href=${challenge_info_list[challenge_id]['attached_file'][i]['address']}>`+challenge_info_list[challenge_id]['attached_file'][i]['name']+'</a><br>';
+    }
+    document.getElementById("detail").getElementsByClassName("attached_file")[0].innerHTML = html;
+  }
+
+
+  $("#detail").css("top", popY).css("left", popX).slideToggle("fast");//设定窗口的位置
+  
+  
+})
+
+//detail box的关闭
+$(".close_btn").click(function () {
+  $('#detail').slideToggle("slow");
+  
+});
+
+
+//按下‘提交flag’
+function submitFlag() {
+
+  var flag_submit = document.getElementById('flag_submit').value;
+  var challenge_id = document.getElementById('detail').getElementsByClassName("challenge_id")[0].innerHTML;
+  var title = challenge_info_list[challenge_id]['title'];
+
+  if('' == flag_submit){
+    alert('flag不能为空');
+    return;
+  }
+
+
+  $.ajax({
+        url : `/ctf/challenge/checkFlag?challenge_id=${challenge_id}&flag_submit=${flag_submit}&title=${title}`,
+        dataType : "text",//数据格式 
+        type : "get",
+        async : false,//是否异步请求
+        success : function(data) {  //如果请求成功，返回数据。
+          alert(data);
+        }
+  })
+
+  document.getElementById('flag_submit').value=null;
+  location.reload();
+}
+
+</script>
+
+</html>

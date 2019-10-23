@@ -1,0 +1,76 @@
+<html>
+	<head>
+		<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<style type="text/css">
+			body{
+				margin: 0px 0px;
+				padding: 0px 0px;
+			}
+			.top{
+				    height: auto; /*高度改为自动高度*/
+				    width:100%;
+				    margin-left: 0;
+				    background:rgb(20, 20, 20);
+				    
+				    top: 0;/*离顶部的距离为0*/
+				    margin-bottom: 5px;
+			}
+
+			.top ul{
+				    /* 清除ul标签的默认样式 */
+				    width: auto;/*宽度也改为自动*/
+				    list-style-type: none;
+				    white-space:nowrap;
+				    overflow: hidden;
+				    margin-left: 5%;
+				    /* margin-top: 0;          */
+				    padding: 0;
+
+			}
+			.top li {
+			    float:right; /* 使li内容横向浮动，即横向排列  */
+			    margin-right:2%;  /* 两个li之间的距离*/
+			    position: relative;
+			    overflow: hidden;
+			}
+
+			.top li a{
+			   /* 设置链接内容显示的格式*/
+			    display: block; /* 把链接显示为块元素可使整个链接区域可点击 */
+			    color:white;
+			    text-align: center;
+			    padding: 10px;
+			    overflow: hidden;
+			    text-decoration: none; /* 去除下划线 */
+			    font-size: 20px;
+			    
+			}
+			.top li a:hover{
+			    /* 鼠标选中时背景变为黑色 */
+			    /*background-color: #111;*/
+			    color: rgb(181, 181, 181)
+			}
+
+			.wrapper {
+				margin: 10%;
+			}
+
+
+		</style>
+	</head>
+
+
+<div class="top" >
+	
+	<ul>
+		<li><a href="/ctf/user/index">我的</a></li>
+		<li><a href="/ctf/user/logout">登出</a></li>
+		<li><a href="/ctf/rank/index">排名</a></li>
+		<li><a href="/ctf/challenge/index">题目</a></li>
+		<li><a href="/ctf/index/notice">公告</a></li>
+		<li><a href="/ctf">首页</a></li>
+	</ul>
+	
+</div>
+</html>

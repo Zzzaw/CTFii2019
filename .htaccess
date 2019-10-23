@@ -1,0 +1,7 @@
+<IFModule mod_rewrite.c>  
+ RewriteEngine on         
+ RewriteCond %{REQUEST_FILENAME} !-d
+ RewriteCond %{REQUEST_FILENAME} !-f
+ #访问xx.com/mframe/aa/bb.php会变成访问xx.com/mframe/index.php?aa/bb
+ RewriteRule ^(.*)$ index.php?/$1 [QSA,PT,L]
+</IFModule>

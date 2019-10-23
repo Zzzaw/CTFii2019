@@ -1,0 +1,36 @@
+<div>
+
+<form name="registerFrom" action="/ctf/user/register" onsubmit="return formCheck()"  method="POST">
+邮箱:<br>
+<input type="text" name="email" value="test01@test01.com">
+<br>
+昵称:<br>
+<input type="text" name="nickname" value="test01">
+<br>
+密码:<br>
+<input type="text" name="password" value="password">
+<br>
+确认密码:<br>
+<input type="text" name="password_confirm" value="password">
+<br>
+学号:<br>
+<input type="text" name="stu_number" value="2018000001">
+<br>
+姓名:<br>
+<input type="text" name="name" value="小红">
+<br>
+<br><br>
+<input type="submit" value="Submit" class="submit_btn">
+</form>
+</div>
+
+<script type="text/javascript">
+	function formCheck() {
+		var password = document.forms["registerFrom"]["password"].value;
+		var password_confirm = document.forms["registerFrom"]["password_confirm"].value;
+		if(password != password_confirm) {
+			alert('密码输入不一致');
+			return false;
+		}
+	}
+</script>
