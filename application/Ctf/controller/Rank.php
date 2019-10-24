@@ -15,7 +15,6 @@ Class Rank extends Controller_Ctf
 
 	public function calcUserScore()
 	{
-		//TODO:
 		//get challenge_id=>current_points array
 		$challengesModel = D('Ctf', 'ChallengesModel');
 		$point_list = $challengesModel->getCscoreArray();	
@@ -23,7 +22,6 @@ Class Rank extends Controller_Ctf
 
 		//get user array
 		//add user['score']
-		
 		$usersModel = D('Ctf', 'UsersModel');
 		$user_list = $usersModel->getUserBySolved();
 		$user_list = json_decode($user_list);
