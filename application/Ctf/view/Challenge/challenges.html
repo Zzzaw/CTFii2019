@@ -22,6 +22,9 @@
   .title{
     text-align:center;
   }
+  .solves{
+    text-align:center;
+  }
   .score{
     text-align:center;
   }
@@ -124,6 +127,11 @@ var challenge_info_list = new Array();
             title.className='title';
             title.innerHTML=info.title;
             box.appendChild(title);
+            //题目名
+            var solves = document.createElement("h2");
+            solves.className='solves';
+            solves.innerHTML='solves : ' + info.solved;
+            box.appendChild(solves);
 
             var element = document.getElementById("boxes_container");
             element.appendChild(box);

@@ -11,4 +11,7 @@ $config['defaultModule'] = 'Ctf';
 $config['defaultController'] = 'Index';
 $config['defaultAction'] = 'index';
 
+$config['min_points'] = 30;
+$config['max_points'] = 500;
+
 return $config;

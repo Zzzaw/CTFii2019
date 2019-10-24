@@ -20,7 +20,7 @@
         async : false,//是否异步请求
         success : function(data) {  //如果请求成功，返回数据。
         var html = "";
-        var ls = data[0];
+        var ls = data;
 
         html ="昵称 : "+ls.nickname;
         $("#nickname").html(html); 

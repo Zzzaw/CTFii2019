@@ -17,7 +17,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
       $.ajax({
-        url : "/ctf/rank/getTopN",//后台请求的数据，用的是PHP
+        url : "/ctf/rank/calcUserScore",//后台请求的数据，用的是PHP
         dataType : "json",//数据格式 
         type : "post",//请求方式
         async : false,//是否异步请求

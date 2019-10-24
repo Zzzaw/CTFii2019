@@ -106,10 +106,23 @@ class User extends Controller_Ctf
 	{
 		check_session_islogin();
 
+		//get challenge_id=>current_points array
+		$challengesModel = D('Ctf', 'ChallengesModel');
+		$point_list = $challengesModel->getCscoreArray();	
+		$point_list = json_decode($point_list);
+
+		//get user
+		//add user['score']
 		$usersModel = D('Ctf', 'UsersModel');
 		$id = $_SESSION['user_id'];
 		$userInfo = $usersModel->getById($id);
-		echo $userInfo;
+		$userInfo = json_decode($userInfo);
+
+		foreach ($userInfo->solved_challenge_id as $solved_challenge_id) {
+			$userInfo->score += $point_list->$solved_challenge_id;
+		}
+		echo json_encode($userInfo);
+	
 	}
 
 

@@ -24,3 +24,5 @@ function D($module, $name)
     $classPath = '\\application\\' . $module . '\\model\\' . $name;
     return new $classPath();
 }
+
+

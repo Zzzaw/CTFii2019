@@ -9,16 +9,24 @@ class UsersModel extends Model
 	{
 		$challenges_list = array();
 
-		$stmt = $this->db->prepare('SELECT * FROM users where user_id=:id');
+		$stmt = $this->db->prepare('SELECT user_id,nickname,solved_challenge_id,email FROM users where user_id=:id');
 		$stmt->bindParam(':id',$id);
 		$stmt->execute();
 		$rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
+
+		if(1 === count($rows)) {
+			$rows[0]['solved_challenge_id'] = explode(';', $rows[0]['solved_challenge_id']);
+			return json_encode($rows[0]);
+		}
+		return false;
+/*
 		foreach ($rows as $row) {
 			//p($row);
 			array_push($challenges_list, $row);
 		}
 		return json_encode($challenges_list);
+		*/
 	}
 
 	public function loginCheck($email, $password)
@@ -79,9 +87,22 @@ class UsersModel extends Model
 		$stmt->bindParam(':user_id',$user_id);
 		$stmt->bindParam(':score',$score);
 		$stmt->execute();
-		//$rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 		$count = $stmt->rowCount();//受影响行数
-		if(1 === $count) {
+		if(2 > $count) {
+			return true;
+		}
+		return false;
+	}
+
+
+	public function setUpdateDate($user_id, $last_update_date)
+	{
+		$stmt = $this->db->prepare('UPDATE users SET last_update_date=:last_update_date where user_id=:user_id');
+		$stmt->bindParam(':user_id',$user_id);
+		$stmt->bindParam(':last_update_date',$last_update_date);
+		$stmt->execute();
+		$count = $stmt->rowCount();//受影响行数
+		if(2 > $count) {
 			return true;
 		}
 		return false;
@@ -110,7 +131,7 @@ class UsersModel extends Model
 		$stmt->bindParam(':solved_challenge_id',$solved_challenge_id);
 		$stmt->execute();
 		$count = $stmt->rowCount();//受影响行数
-		if(1 === $count) {
+		if(2 > $count) {
 			return true;
 		}
 		return false;
@@ -150,17 +171,21 @@ class UsersModel extends Model
 		return false;
 	}
 
-	public function getTopN($n)
+
+
+	public function getUserBySolved()
 	{
 		$challenges_list = array();
 
-		$stmt = $this->db->prepare('SELECT * FROM users ORDER BY score DESC LIMIT ' . intval($n));
+		$stmt = $this->db->prepare('SELECT user_id,nickname,solved_challenge_id,last_update_date FROM users WHERE solved_challenge_id IS NOT NULL');
 		//$stmt->bindParam(':n',$n);
 		$stmt->execute();
 		$rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 		foreach ($rows as $row) {
 			//p($row);
+			$row['solved_challenge_id'] = explode(';', $row['solved_challenge_id']);
+			$row['last_update_date'] = explode('-', $row['last_update_date']);
 			array_push($challenges_list, $row);
 		}
 		return json_encode($challenges_list);
