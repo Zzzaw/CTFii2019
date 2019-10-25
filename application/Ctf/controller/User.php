@@ -69,16 +69,18 @@ class User extends Controller_Ctf
 		$password = $_POST['password'];
 		$stu_number = $_POST['stu_number'];
 		$name = $_POST['name'];
+		$is_jnu = $_POST['is_jnu'];
 		
 		$email = str_r($email);
 		$nickname = str_r($nickname);
 		$password = str_r($password);
 		$stu_number = str_r($stu_number);
 		$name = str_r($name);
+		$is_jnu = intval($is_jnu);
 
+		if(!$is_jnu) $stu_number=NULL;
 
-
-		if(empty($email) or empty($password) or empty($stu_number) or empty($name)){
+		if(empty($email) or empty($password) or ($is_jnu && empty($stu_number)) or empty($name)){
 			p('no');//TODO
 			exit();
 		}
@@ -86,7 +88,7 @@ class User extends Controller_Ctf
 		
 
 		$usersModel = D('Ctf', 'UsersModel');
-		if($usersModel->registerJnu($email, $nickname, $password, $stu_number, $name)) {
+		if($usersModel->register($email, $nickname, $password, $stu_number, $name, $is_jnu)) {
 			p('ok');//TODO
 		} else {
 			p('failed');//TODO

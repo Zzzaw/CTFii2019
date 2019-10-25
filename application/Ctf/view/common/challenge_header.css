@@ -1,0 +1,46 @@
+.challenge_header{
+	    height: auto; /*高度改为自动高度*/
+	    width:100%;
+	    margin-left: 0;
+	    background:rgb(255, 255, 255);
+	    
+	    top: 0;/*离顶部的距离为0*/
+	    margin-top : 0;
+	    margin-bottom: 0px;
+}
+
+.challenge_header ul{
+	    /* 清除ul标签的默认样式 */
+	    width: auto;/*宽度也改为自动*/
+	    list-style-type: none;
+	    white-space:nowrap;
+	    overflow: hidden;
+	    margin-left: 0%;
+	    margin-bottom: 0;
+	    margin-top: 0;          
+	    padding: 0;
+
+}
+.challenge_header li {
+    float:left; /* 使li内容横向浮动，即横向排列  */
+    margin-right:2%;  /* 两个li之间的距离*/
+    position: relative;
+    overflow: hidden;
+}
+
+.challenge_header li a{
+   /* 设置链接内容显示的格式*/
+    display: block; /* 把链接显示为块元素可使整个链接区域可点击 */
+    color:black;
+    text-align: center;
+    padding: 10px;
+    overflow: hidden;
+    text-decoration: none; /* 去除下划线 */
+    font-size: 30px;
+    
+}
+.challenge_header li a:hover{
+    /* 鼠标选中时背景变为黑色 */
+    background-color: #111;
+    color: rgb(181, 181, 181)
+}

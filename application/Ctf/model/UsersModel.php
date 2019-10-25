@@ -45,16 +45,17 @@ class UsersModel extends Model
 		
 	}
 
-	public function registerJnu($email, $nickname, $password, $stu_number, $name)
+	public function register($email, $nickname, $password, $stu_number, $name, $is_jnu)
 	{
 
-		$stmt = $this->db->prepare('insert into users (email,nickname,password,stu_number,name) 
-									values (:email,:nickname,:password,:stu_number,:name)');
+		$stmt = $this->db->prepare('insert into users (email,nickname,password,stu_number,name,is_jnu) 
+									values (:email,:nickname,:password,:stu_number,:name,:is_jnu)');
 		$stmt->bindParam(':email',$email);
 		$stmt->bindParam(':nickname',$nickname);
 		$stmt->bindParam(':password',$password);
 		$stmt->bindParam(':stu_number',$stu_number);
 		$stmt->bindParam(':name',$name);
+		$stmt->bindParam(':is_jnu',$is_jnu);
 		$stmt->execute();
 		$count = $stmt->rowCount();//受影响行数
 		if(1 === $count) {

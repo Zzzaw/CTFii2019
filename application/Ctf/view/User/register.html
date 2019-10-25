@@ -1,24 +1,32 @@
-<div>
-
+<div class="main_wrapper">
+<h1>注册</h1>
 <form name="registerFrom" action="/ctf/user/register" onsubmit="return formCheck()"  method="POST">
 邮箱:<br>
-<input type="text" name="email" value="test01@test01.com">
+<input type="text" name="email" >
 <br>
 昵称:<br>
-<input type="text" name="nickname" value="test01">
+<input type="text" name="nickname" >
 <br>
 密码:<br>
-<input type="text" name="password" value="password">
+<input type="text" name="password" >
 <br>
 确认密码:<br>
-<input type="text" name="password_confirm" value="password">
+<input type="text" name="password_confirm" >
 <br>
 学号:<br>
 <input type="text" name="stu_number" value="2018000001">
 <br>
 姓名:<br>
-<input type="text" name="name" value="小红">
+<input type="text" name="name" >
 <br>
+<br>
+
+<label for="male">yes</label>
+<input type="radio" name="is_jnu" value=1>
+<span>&nbsp&nbsp&nbsp&nbsp</span>
+<label for="female">no</label>
+<input type="radio" name="is_jnu" value=0><br><br>
+
 <br><br>
 <input type="submit" value="Submit" class="submit_btn">
 </form>

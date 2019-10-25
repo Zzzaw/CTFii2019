@@ -1,11 +1,44 @@
 <html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-</head>
-<div>
+<style type="text/css">
+	#rankingList
+	{
+		font-family: verdana,arial,sans-serif;
+		font-size:11px;
+		color:#333333;
+		border-width: 1px;
+		border-color: #666666;
+		border-collapse: collapse;
+		width:100%;
+	}
+	#rankingList th
+	{
+		border : 1px solid black;
+		text-align:middle;
+		background-color: #dedede;
+		font-size: 30px;
+	}
+	#rankingList td
+	{
+		border : 1px solid black;
+		padding: 20px;
+		font-size: 20px;
+
+	}
+	.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin:10px;
+}
+</style>
+<div class="main_wrapper">
 	<h1>排名</h1>
-	<table border="1" id="rankingList">
+	<table id="rankingList">
 		<tr>
 		<th>rank</th>
 		<th>昵称</th>
@@ -13,8 +46,15 @@
 		</tr>
 
 	</table>
+	<div style="text-align:center;"><button id="last_page" class="button">上一页</button><button id="next_page" class="button">下一页</button></div>
+	
 </div>
 <script type="text/javascript">
+
+var info_list;
+var _page=1;
+var _length=20;
+
 	$(document).ready(function() {
       $.ajax({
         url : "/ctf/rank/calcUserScore",//后台请求的数据，用的是PHP
@@ -22,36 +62,74 @@
         type : "post",//请求方式
         async : false,//是否异步请求
         success : function(data) {  //如果请求成功，返回数据。
-        	for(var i=0;i<data.length;i++){
-        		var html = "";
-		        var info = data[i];
+        	info_list = data;
 
-
-		        //生成
-	            var rank_tr = document.createElement("tr");
-	            rank_tr.className='rank_tr';
-	            //nickname
-	            var rank = document.createElement("td");
-	            rank.innerHTML=i+1;
-	            rank_tr.appendChild(rank);
-	            //nickname
-	            var nickname = document.createElement("td");
-	            nickname.innerHTML=info.nickname;
-	            rank_tr.appendChild(nickname);
-	            //score
-	            var score = document.createElement("td");
-	            score.innerHTML=info.score;
-	            rank_tr.appendChild(score);
-
-	            var element = document.getElementById("rankingList");
-            	element.appendChild(rank_tr);
-
-        	}
 
 
         }, 
       })
+
+      appendInfoByPage(_page,_length);
+
     })
+
+    function appendInfoByPage(page,length)
+    {
+
+        for(var i=0;i<length;i++){
+    		if(length*(page-1)+i > info_list.length-1) return;
+
+    		var html = "";
+	        var info = info_list[length*(page-1)+i];
+
+
+	        //生成
+            var rank_tr = document.createElement("tr");
+            rank_tr.className='rank_tr';
+            //nickname
+            var rank = document.createElement("td");
+            rank.innerHTML=length*(page-1)+i+1;
+            rank_tr.appendChild(rank);
+            //nickname
+            var nickname = document.createElement("td");
+            nickname.innerHTML=info.nickname;
+            rank_tr.appendChild(nickname);
+            //score
+            var score = document.createElement("td");
+            score.innerHTML=info.score;
+            rank_tr.appendChild(score);
+
+            var rankingList = document.getElementById("rankingList");
+        	rankingList.appendChild(rank_tr);
+
+    	}
+    }
+
+    $("#last_page").click(function () {
+      var rankingList = document.getElementById("rankingList");
+      var childs = rankingList.childNodes;
+      for(var i=childs.length-1;i>1;i--){
+      	rankingList.removeChild(childs[i]);
+      }
+      _page -= 1;
+      if(_page < 1) _page=1;
+
+	  appendInfoByPage(_page,_length);
+	  
+	});
+
+	$("#next_page").click(function () {
+      var rankingList = document.getElementById("rankingList");
+      var childs = rankingList.childNodes;
+      for(var i=childs.length-1;i>1;i--){
+      	rankingList.removeChild(childs[i]);
+      }
+      _page += 1;
+      if(_page > Math.ceil(info_list.length/_length)) _page=Math.ceil(info_list.length/_length);
+
+	  appendInfoByPage(_page,_length);
+	  
+	});
 </script>
 
 </html>

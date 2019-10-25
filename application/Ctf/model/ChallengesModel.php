@@ -95,6 +95,7 @@ class ChallengesModel extends Model
 		return false;
 	}
 
+/*
 	//base_score
 	public function getBscoreById($challenge_id)
 	{
@@ -108,6 +109,7 @@ class ChallengesModel extends Model
 		}
 		return false;
 	}
+*/
 
 	//`solved` = `solved`+1
 	public function addSolvedCount($challenge_id)

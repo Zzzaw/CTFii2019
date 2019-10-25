@@ -12,12 +12,18 @@ Class Challenge extends Controller_Ctf
 		$this->display('challenges');
 	}
 
-	public function web()
+	public function getChallenges()
 	{
 		check_session_islogin();
 
+		if(isset($_GET['type'])){
+			$type = $_GET['type'];
+		} else {
+			echo '';
+		}
+
 		$challengesModel = D('Ctf', 'ChallengesModel');
-		$Challenge = $challengesModel->getByType('web');
+		$Challenge = $challengesModel->getByType($type);
 		echo $Challenge;
 		//echo json_encode('hi');
 		//$this->display('challenges');
@@ -43,7 +49,7 @@ Class Challenge extends Controller_Ctf
 		$result = $usersModel->checkIsSolved($user_id, $challenge_id);
 		if($result){
 			echo '已提交过本题flag';
-			//exit();
+			exit();
 		}
 
 		//检查flag正确性
@@ -72,7 +78,7 @@ Class Challenge extends Controller_Ctf
 		}
 
 		//update challenge's current_points
-		$base_score = $challengesModel->getBscoreById($challenge_id);
+		//$base_score = $challengesModel->getBscoreById($challenge_id);
 		$solved_count = $challengesModel->getSolvedCount($challenge_id);
 		$current_points = $this->get_current_points(30, 500, $solved_count);
 		if(!$challengesModel->setCscore($challenge_id, $current_points)){
