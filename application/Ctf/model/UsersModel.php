@@ -14,9 +14,10 @@ class UsersModel extends Model
 		$stmt->execute();
 		$rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-
 		if(1 === count($rows)) {
-			$rows[0]['solved_challenge_id'] = explode(';', $rows[0]['solved_challenge_id']);
+			if(isset($rows[0]['solved_challenge_id'])){
+				$rows[0]['solved_challenge_id'] = explode(';', $rows[0]['solved_challenge_id']);
+			}
 			return json_encode($rows[0]);
 		}
 		return false;

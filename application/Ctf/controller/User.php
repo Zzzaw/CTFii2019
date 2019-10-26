@@ -42,7 +42,6 @@ class User extends Controller_Ctf
 			session_start();
 			$_SESSION['islogin'] = true;
 			$_SESSION['user_id'] = $user_id;
-			p($_SESSION['user_id']);
 			p('login success');//TODO
 			//header('location:/ctf');
 
@@ -119,6 +118,12 @@ class User extends Controller_Ctf
 		$id = $_SESSION['user_id'];
 		$userInfo = $usersModel->getById($id);
 		$userInfo = json_decode($userInfo);
+
+		if($userInfo->solved_challenge_id == null){
+			$userInfo->score = 0;
+			echo json_encode($userInfo);
+			return;
+		}
 
 		foreach ($userInfo->solved_challenge_id as $solved_challenge_id) {
 			$userInfo->score += $point_list->$solved_challenge_id;

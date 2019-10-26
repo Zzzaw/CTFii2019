@@ -20,7 +20,7 @@
 <input type="text" name="name" >
 <br>
 <br>
-
+是否暨大学生: 
 <label for="male">yes</label>
 <input type="radio" name="is_jnu" value=1>
 <span>&nbsp&nbsp&nbsp&nbsp</span>
@@ -40,5 +40,23 @@
 			alert('密码输入不一致');
 			return false;
 		}
+
+		//is_jnu
+		var bFlag = false;
+
+		var is_jnu = document.getElementsByName('is_jnu');
+		for (var i = 0; i < is_jnu.length; i++) {
+			if (is_jnu[i].checked) {
+				bFlag = true;
+				break;
+			}
+		}
+
+		if (bFlag == false) {
+			alert('是否暨大学生不能为空，请选择！')
+			//document.getElementById('is_jnu').focus();
+			return false;
+		}
+
 	}
 </script>
